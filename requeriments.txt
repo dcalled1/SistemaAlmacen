@@ -1,3 +1,5 @@
+pymongo
+tkinter
 RPi.GPIO
 spidev
 mfrc522

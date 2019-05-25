@@ -1,6 +1,13 @@
+import pymongo as mongo
 
+client = mongo.MongoClient('mongodb://localhost:27017/')
+db=client["AlmacenDB"]
 
-class Material():
+coleccionMateriales=db["Materiales"]
 
-    def __init__(self):
-        dasd
+list=db.list_collection_names()
+
+if "Materiales" in list:
+    print("si, puta")
+else:
+    print("no, puta")
