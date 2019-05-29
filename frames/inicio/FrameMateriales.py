@@ -39,7 +39,7 @@ class AñadirNuevo(Toplevel):
         self.cantLabel = Label(self, text="Cantidad: ")
         self.cantLabel.grid(column=0, row=3, padx=10, pady=10)
 
-        self.cantidad = ttk.Spinbox(self, state="disabled", increment=1)
+        self.cantidad = Entry(self, state="disabled")
         self.cantidad.grid(column=1, row=3, padx=10, pady=10)
 
         self.anadirBot=Button(self, text="Agregar", command=self.setData)
@@ -64,7 +64,7 @@ class AñadirNuevo(Toplevel):
             if self.cant=='':
                 self.conexion.anadirMaterial(self.cod, self.nom)
             else:
-                self.conexion.anadirMaterial(self.cod, self.nom, self.cant)
+                self.conexion.anadirMaterial(self.cod, self.nom, int(self.cant))
             self.master.listar()
             self.destroy()
 
@@ -102,9 +102,9 @@ class Materiales(ttk.Frame):
                              command=self.eliminarMaterial)
         self.eliminar.pack(side=RIGHT)
 
-        self.editar = Button(self, text="Editar", state="disabled",
-                               command=self.editarMaterial)
-        self.editar.pack(side=RIGHT)
+        #self.editar = Button(self, text="Editar", state="disabled",
+         #                      command=self.editarMaterial)
+        #self.editar.pack(side=RIGHT)
 
         self.pack(expand=True, fill=BOTH)
 
@@ -118,7 +118,9 @@ class Materiales(ttk.Frame):
         añadir=AñadirNuevo(self.list, master=self)
 
     def eliminarMaterial(self):
-        self.list.selection_remove(self.list.selection())
+        item=self.list.item(self.list.selection())
+        self.conexion.quitarMaterial(item.get('text'), item.get('values')[0])
+        self.listar()
 
     def editarMaterial(self):
         pass
@@ -127,7 +129,11 @@ class Materiales(ttk.Frame):
         docs=self.conexion.listarMateriales()
         self.list.delete(*self.list.get_children())
         for doc in docs:
-            self.list.insert('', END, text=doc.get('codigo'),
+            if doc.get('cantidad')==-1:
+                self.list.insert('', END, text=doc.get('codigo'),
+                             values=(doc.get('nombre')), tags=('t'))
+            else:
+                self.list.insert('', END, text=doc.get('codigo'),
                              values=(doc.get('nombre'), str(doc.get('cantidad'))), tags=('t'))
 
 

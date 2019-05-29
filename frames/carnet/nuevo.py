@@ -46,6 +46,7 @@ class NuevoCarnet(Toplevel):
             ls.append(dbobj.get('_id'))
         self.conexion.anadirPedido(self.id, ls)
         self.master.historial.listar()
+        self.master.devoluciones.listar()
         self.destroy()
 
     def cancelar(self):
@@ -55,8 +56,9 @@ class NuevoCarnet(Toplevel):
         docs=self.conexion.listarMateriales()
         self.list.delete(*self.list.get_children())
         for doc in docs:
-            if doc.get('cantidad') != 'NA':
-                if doc.get('cantidad') <= 0:
+            cantidad=int(doc.get('cantidad'))
+            if cantidad != -1:
+                if cantidad == 0:
                     self.list.insert('', END, text=doc.get('codigo'), values=(doc.get('nombre'), 'No disponible'))
                 else:
                     self.list.insert('', END, text=doc.get('codigo'), values=(doc.get('nombre'), 'Disponible'))

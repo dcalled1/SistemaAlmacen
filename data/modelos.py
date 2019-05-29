@@ -30,6 +30,9 @@ class Conexion:
 
     def listarMateriales(self):
         return self.material.find()
+        
+    def quitarMaterial(self, codigo, nombre):
+        ids=self.material.remove({'codigo': codigo, 'nombre': nombre})
 
     def agregarHistorial(self,codigo,cantidad,nombre):
         post = {
@@ -45,8 +48,7 @@ class Conexion:
         return self.historial.find()
 
     def buscarHistorial(self, prestante, fecha):
-        print(fecha)
-        return self.historial.find_one({'prestante': prestante, 'fecha': fecha})
+        return self.historial.find_one({'prestante': int(prestante), 'fecha': fecha})
 
     def buscarMatxID(self, id):
         return self.material.find_one({'_id': id})
@@ -68,13 +70,12 @@ class Conexion:
         post={'prestante': prestante, 'materiales': materiales, 'fecha': datetime.datetime.now()}
         self.historial.insert(post)
         self.devolucion.insert(post)
-        print(post)
 		
     def buscarMaterial(self, codigo, nombre):
         return self.material.find_one({'codigo': codigo , 'nombre': nombre})
 
     def checarDevolucion(self, id):
-        if self.devolucion.count_documents({'prestante': id}) == 0:
+        if self.devolucion.find({'prestante': id}).count() == 0:
             return False
         else:
             return True

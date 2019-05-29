@@ -1,6 +1,3 @@
-pymongo
-dnspython
-tkinter
 RPi.GPIO
 spidev
 mfrc522

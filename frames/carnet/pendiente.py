@@ -32,6 +32,7 @@ class CarnetPendiente(Toplevel):
 
     def devolvermaterial(self):
         self.conexion.devolverMaterial(self.id)
+        self.master.devoluciones.listar()
         self.destroy()
 
     def cancelar(self):
@@ -41,5 +42,6 @@ class CarnetPendiente(Toplevel):
         materiales=self.conexion.listarMatPrestante(self.id)
         for material in materiales:
             mat=self.conexion.buscarMatxID(material)
-            self.list.insert('', END, text=mat.get('codigo'),
-                             values=(mat.get('nombre')), tags=("t",))
+            if mat:
+                self.list.insert('', END, text=mat.get('codigo'),
+                                values=(mat.get('nombre')), tags=("t",))

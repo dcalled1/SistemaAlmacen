@@ -45,7 +45,7 @@ try:
         app.update()
         time.sleep(0.1)
         id=reader.read_id_no_block()
-        if not id:
+        if id:
             abrirCarnet(id)
 except TclError:
     pass
