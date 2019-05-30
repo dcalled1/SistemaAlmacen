@@ -1,6 +1,6 @@
 from tkinter import ttk
 from tkinter import  *
-import time
+from data.modelos import Conexion
 
 class AñadirNuevo(Toplevel):
 
@@ -9,12 +9,14 @@ class AñadirNuevo(Toplevel):
     nom=None
     cant=None
 
-    def __init__(self, lista, *args, **kwargs):
+    def __init__(self, list, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("Añadir material")
         self.config()
 
-        self.lista=lista;
+        self.lista=list
+
+        self.conexion=Conexion()
 
         self.codLabel=Label(self, text="Código: ")
         self.codLabel.grid(column=0, row=0, padx=10, pady=10)
@@ -59,6 +61,7 @@ class AñadirNuevo(Toplevel):
         if self.cod!='' and self.nom!='':
             self.lista.insert("", END, text=self.cod,
                         values=(self.nom, self.cant.__str__()), tags=("t",))
+            self.conexion.anadirMaterial(self.cod, self.nom, self.cant)
             self.destroy()
 
     def cancel(self):
@@ -71,6 +74,8 @@ class AñadirNuevo(Toplevel):
 class Materiales(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.conexion=Conexion()
 
         self.list=ttk.Treeview(self, columns=("nombre", "cantidad"), selectmode=BROWSE)
 
@@ -108,12 +113,16 @@ class Materiales(ttk.Frame):
 
 
     def nuevoMaterial(self):
-        añadir=AñadirNuevo(self.list, self)
+        añadir=AñadirNuevo(self.list)
 
     def eliminarMaterial(self):
         self.list.selection_remove(self.list.selection())
 
     def editarMaterial(self):
         pass
+
+    def listar(self):
+        docs=self.conexion.listarMateriales()
+        print(docs)
 
 
