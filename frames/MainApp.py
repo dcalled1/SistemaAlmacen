@@ -22,7 +22,7 @@ class AppPrincipal(ttk.Frame):
         self.devoluciones=Devoluciones(self.notebook)
         self.notebook.add(self.devoluciones, text="Devoluciones pendientes", padding=10)
 
-        self.notebook.pack(padx=10, pady=10, side=LEFT)
+        self.notebook.pack(padx=10, pady=10, side=LEFT, fill=BOTH)
         self.pack(fill=BOTH)
 
 win = Tk()

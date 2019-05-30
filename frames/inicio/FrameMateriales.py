@@ -9,22 +9,24 @@ class AñadirNuevo(Toplevel):
     nom=None
     cant=None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, lista, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("Añadir material")
         self.config()
+
+        self.lista=lista;
 
         self.codLabel=Label(self, text="Código: ")
         self.codLabel.grid(column=0, row=0, padx=10, pady=10)
 
         self.codigo=ttk.Entry(self)
-        self.codigo.grid(column=1, row=0, padx=10, pady=10)
+        self.codigo.grid(column=1, row=0, padx=10, pady=10, sticky='ew')
 
         self.nomLabel = Label(self, text="Nombre: ")
         self.nomLabel.grid(column=0, row=1, padx=10, pady=10)
 
         self.nombre = ttk.Entry(self)
-        self.nombre.grid(column=1, row=1, padx=10, pady=10)
+        self.nombre.grid(column=1, row=1, padx=10, pady=10, sticky='ew')
 
         self.var=BooleanVar(self)
 
@@ -35,11 +37,14 @@ class AñadirNuevo(Toplevel):
         self.cantLabel = Label(self, text="Cantidad: ")
         self.cantLabel.grid(column=0, row=3, padx=10, pady=10)
 
-        self.cantidad = ttk.Spinbox(self, state="disabled")
+        self.cantidad = ttk.Spinbox(self, state="disabled", increment=1)
         self.cantidad.grid(column=1, row=3, padx=10, pady=10)
 
-        self.añadirBot=Button(self, text="Agregar", command=self.setData)
-        self.añadirBot.grid(column=1, row=4, columnspan=2)
+        self.anadirBot=Button(self, text="Agregar", command=self.setData)
+        self.anadirBot.grid(column=1, row=4, columnspan=2, sticky='w')
+
+        self.cancelBot = Button(self, text="Cancelar", command=self.cancel)
+        self.cancelBot.grid(column=1, row=4, columnspan=2, sticky='e')
 
 
     def cambiar(self):
@@ -50,16 +55,15 @@ class AñadirNuevo(Toplevel):
         self.cod=self.codigo.get()
         self.nom=self.nombre.get()
         self.cant=self.cantidad.get()
-        self.procesando=False
 
-    def getData(self, list):
-        while self.procesando:
-            pass
-        self.añadirLista(list,self.cod, self.nom, self.cant)
+        if self.cod!='' and self.nom!='':
+            self.lista.insert("", END, text=self.cod,
+                        values=(self.nom, self.cant.__str__()), tags=("t",))
+            self.destroy()
 
-    def añadirLista(list, cod=None, nom=None, cant=None):
-        item = list.insert("", END, text=cod,
-                                values=(nom, cant.__str__()), tags=("t",))
+    def cancel(self):
+        self.destroy()
+
 
 
 
@@ -68,7 +72,7 @@ class Materiales(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.list=ttk.Treeview(self, columns=("nombre", "cantidad"))
+        self.list=ttk.Treeview(self, columns=("nombre", "cantidad"), selectmode=BROWSE)
 
         self.list.heading("#0", text="Código")
         self.list.heading("nombre", text="Nombre")
@@ -101,13 +105,13 @@ class Materiales(ttk.Frame):
         self.eliminar.config(state="normal")
         self.editar.config(state="normal")
 
+
+
     def nuevoMaterial(self):
-        añadir=AñadirNuevo(self)
-        time.sleep(5)
-        data=añadir.getData(self.list)
+        añadir=AñadirNuevo(self.list, self)
 
     def eliminarMaterial(self):
-        pass
+        self.list.selection_remove(self.list.selection())
 
     def editarMaterial(self):
         pass
