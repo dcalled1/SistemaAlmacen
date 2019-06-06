@@ -59,9 +59,13 @@ class AñadirNuevo(Toplevel):
         self.cant=self.cantidad.get()
 
         if self.cod!='' and self.nom!='':
-            self.lista.insert("", END, text=self.cod,
-                        values=(self.nom, self.cant.__str__()), tags=("t",))
-            self.conexion.anadirMaterial(self.cod, self.nom, self.cant)
+            #self.lista.insert("", END, text=self.cod,
+                        #values=(self.nom, self.cant.__str__()), tags=("t",))
+            if self.cant=='':
+                self.conexion.anadirMaterial(self.cod, self.nom)
+            else:
+                self.conexion.anadirMaterial(self.cod, self.nom, self.cant)
+            self.master.listar()
             self.destroy()
 
     def cancel(self):
@@ -86,7 +90,7 @@ class Materiales(ttk.Frame):
         self.list.tag_bind("t", "<<TreeviewSelect>>",
                                self.itemSeleccionado)
 
-        item=self.list.insert("", END, text="1", values=("arduino", "20"), tags=("t",))
+        self.listar()
 
         self.list.pack(expand=True, fill=BOTH)
 
@@ -111,9 +115,8 @@ class Materiales(ttk.Frame):
         self.editar.config(state="normal")
 
 
-
     def nuevoMaterial(self):
-        añadir=AñadirNuevo(self.list)
+        añadir=AñadirNuevo(self.list, master=self)
 
     def eliminarMaterial(self):
         self.list.selection_remove(self.list.selection())
@@ -123,6 +126,9 @@ class Materiales(ttk.Frame):
 
     def listar(self):
         docs=self.conexion.listarMateriales()
-        print(docs)
+        self.list.delete(*self.list.get_children())
+        for doc in docs:
+            self.list.insert('', END, text=doc.get('codigo'),
+                             values=(doc.get('nombre'), str(doc.get('cantidad'))))
 
 

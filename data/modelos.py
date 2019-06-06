@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-import dns
 
 
 class Conexion:
@@ -16,22 +15,14 @@ class Conexion:
         self.historial = self.db['Historial']
         self.devolucion = self.db['Devolucion']
 
-    def anadirMaterial(self, codigo, nombre, cantidad=-1):
-        if cantidad == -1:
-            post = {
-                'codigo': codigo,
-                'nombre': nombre
-            }
-            print(post)
-            self.material.insert_one(post)
-        else:
-            post = {
-                'codigo': codigo,
-                'nombre': nombre,
-                'cantidad': cantidad
-            }
-            print(post)
-            self.material.insert_one(post)
+    def anadirMaterial(self, codigo, nombre, cantidad='NA'):
+        post = {
+            'codigo': codigo,
+            'nombre': nombre,
+            'cantidad': cantidad
+        }
+        print(post)
+        self.material.insert_one(post)
 
     def listarMateriales(self):
         return self.material.find()

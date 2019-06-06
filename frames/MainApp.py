@@ -3,6 +3,8 @@ from tkinter import *
 from frames.inicio.FrameDevoluciones import *
 from frames.inicio.FrameHistorial import *
 from frames.inicio.FrameMateriales import *
+from frames.carnet.nuevo import *
+from frames.carnet.pendiente import *
 import time
 
 class AppPrincipal(ttk.Frame):
@@ -27,10 +29,12 @@ class AppPrincipal(ttk.Frame):
 
 win = Tk()
 app = AppPrincipal(win)
+v1=NuevoCarnet(app)
+v2=CarnetPendiente(app)
 try:
     while 1:
         app.update()
         time.sleep(0.1)
 
 except TclError:
-    print("Apagado exitoso")
+    pass
