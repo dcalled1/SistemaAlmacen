@@ -7,7 +7,7 @@ class Conexion:
 
     def __init__(self):
 
-        self.client = MongoClient(self.uri)
+        self.client = MongoClient()
 
         self.db = self.client[self.dbname]
 
@@ -26,3 +26,41 @@ class Conexion:
 
     def listarMateriales(self):
         return self.material.find()
+
+    def agregarHistorial(self,codigo,cantidad,nombre):
+        post = {
+            'codigo':codigo,
+            'cantidad':cantidad,
+            'nombre':nombre
+        }
+        self.material.find_one(post)
+        #Ese nombre se pondrá en el otro frame
+        #obtener la fecha
+
+    def agregarDevolucionesPendientes(self, codigo, cantidad, nombre):
+        post = {
+            'codigo': codigo,
+            'cantidad': cantidad,
+            'nombre': nombre
+        }
+        self.material.find_one(post)
+
+    def listarHistorial(self):
+        return self.historial.find()
+
+    def buscarHistorial(self, prestante, fecha):
+        return self.historial.find_one({'prestante': prestante , 'fecha': fecha})
+
+    def buscarMatxID(self, id):
+        return self.material.find_one({'_id': id})
+
+    def buscarHistxID(self, id):
+        return self.historial.find_one({'_id': id})
+
+    def listarDevoluciones(self):
+        return self.devolucion.find()
+
+    def buscarDevoluciones(self, prestante, fecha):
+        return self.devolucion.find_one({'prestante': prestante, 'fecha': fecha})
+
+
