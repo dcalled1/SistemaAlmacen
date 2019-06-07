@@ -110,7 +110,6 @@ class Materiales(ttk.Frame):
 
 
     def itemSeleccionado(self, event):
-        print("item en seleccion")
         self.eliminar.config(state="normal")
         self.editar.config(state="normal")
 
@@ -129,6 +128,7 @@ class Materiales(ttk.Frame):
         self.list.delete(*self.list.get_children())
         for doc in docs:
             self.list.insert('', END, text=doc.get('codigo'),
-                             values=(doc.get('nombre'), str(doc.get('cantidad'))))
+                             values=(doc.get('nombre'), str(doc.get('cantidad'))), tags=('t'))
+
 
 
