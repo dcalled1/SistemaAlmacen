@@ -14,8 +14,6 @@ class Historial(ttk.Frame):
         self.list.heading("fecha", text="Fecha")
         self.list.tag_bind("t", "<<TreeviewSelect>>",
                                self.itemSeleccionado)
-
-        item=self.list.insert("", END, text="1", values=(time.strftime("%d/%m/%y")), tags=("t",))
         self.listar()
 
         self.list.pack(expand=True, fill=BOTH)
@@ -24,13 +22,15 @@ class Historial(ttk.Frame):
 
 
     def itemSeleccionado(self, event):
-        print("item en seleccion")
         idITEM=self.list.item(self.list.selection())
-
-        reg=self.conexion.buscarHistorial(idITEM.get('text'), idITEM.get('values')[0])
-
-        if reg:
-            obtener = obtenerHis(reg.get("_id"))
+        y=int(idITEM.get('values')[0].split('-')[0])
+        m=int(idITEM.get('values')[0].split('-')[1])
+        d=int(idITEM.get('values')[0].split('-')[2])
+        start=datetime.datetime(y,m,d, 0, 0, 0)
+        end=datetime.datetime(y,m,d, 23, 59, 59)
+        reg=self.conexion.buscarHistorial(idITEM.get('text'), {'$lt': end, '$gte': start})
+        print(reg)
+        obtener = obtenerHis(reg.get("_id"))
 
     def listar(self):
         docs = self.conexion.listarHistorial()
@@ -54,6 +54,7 @@ class obtenerHis(Toplevel):
         self.list.heading("Cantidad", text="Cantidad")
         self.list.tag_bind("t", "<<TreeviewSelect>>",
                                self.itemSeleccionado)
+        self.listarMat()
         self.list.pack(expand=True, fill=BOTH)
         arr=self.list.item(self.list.selection())
 
@@ -63,12 +64,14 @@ class obtenerHis(Toplevel):
 
 
     def listarMat(self):
-        materiales = self.conexion.buscarHistxID(self.id)
+        registro = self.conexion.buscarHistxID(self.id)
+        materiales=registro.get('materiales')
         self.list.delete(*self.list.get_children())
         for i in materiales:
             mat=self.conexion.buscarMatxID(i)
-            self.list.insert('', END, text= mat.get('_id'),
+            self.list.insert('', END, text= mat.get('codigo'),
                              values=(i.get('cantidad')), tags=("t",))
+
 
 
 
