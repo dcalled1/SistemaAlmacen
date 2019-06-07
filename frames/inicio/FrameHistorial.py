@@ -49,11 +49,10 @@ class obtenerHis(Toplevel):
         self.title("Historial")
         self.config()
         self.geometry("400x400+300+100")
-        self.list=ttk.Treeview(self, columns=("Cantidad"), selectmode=BROWSE)
-        self.list.heading("#0", text="Nombre")
-        self.list.heading("Cantidad", text="Cantidad")
-        self.list.tag_bind("t", "<<TreeviewSelect>>",
-                               self.itemSeleccionado)
+        self.list=ttk.Treeview(self, columns=("nombre"), selectmode=BROWSE)
+        self.list.heading("#0", text="Codigo")
+        self.list.heading("nombre", text="Nombre")
+
         self.listarMat()
         self.list.pack(expand=True, fill=BOTH)
         arr=self.list.item(self.list.selection())
@@ -70,7 +69,7 @@ class obtenerHis(Toplevel):
         for i in materiales:
             mat=self.conexion.buscarMatxID(i)
             self.list.insert('', END, text= mat.get('codigo'),
-                             values=(i.get('cantidad')), tags=("t",))
+                             values=(mat.get('nombre')), tags=("t",))
 
 
 

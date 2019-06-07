@@ -16,6 +16,9 @@ class Conexion:
         self.historial = self.db['Historial']
         self.devolucion = self.db['Devolucion']
 
+    def cerrar(self):
+        self.client.close()
+
     def anadirMaterial(self, codigo, nombre, cantidad=-1):
         post = {
             'codigo': codigo,

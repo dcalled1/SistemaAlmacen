@@ -6,6 +6,8 @@ from frames.inicio.FrameMateriales import *
 from frames.carnet.nuevo import *
 from frames.carnet.pendiente import *
 import time
+import RPi.GPIO as IO
+from mfrc522 import SimpleMFRC522
 
 class AppPrincipal(ttk.Frame):
 
@@ -29,12 +31,23 @@ class AppPrincipal(ttk.Frame):
 
 win = Tk()
 app = AppPrincipal(win)
-v1=NuevoCarnet(master=app)
-v2=CarnetPendiente(master=app)
+reader=SimpleMFRC522()
+
+def abrirCarnet(pend):
+    con=Conexion()
+    if con.checarDevolucion(pend):
+        c=CarnetPendiente(master=app,id=pend)
+    else:
+        c=NuevoCarnet(master=app, id=pend)
+
 try:
     while 1:
         app.update()
         time.sleep(0.1)
-
+        id=reader.read_id_no_block()
+        if not id:
+            abrirCarnet(id)
 except TclError:
     pass
+finally:
+    IO.cleanup()

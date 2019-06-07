@@ -65,4 +65,4 @@ class NuevoCarnet(Toplevel):
 
 
     def cancelar(self):
-        pass
+        self.destroy()

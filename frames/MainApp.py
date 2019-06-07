@@ -24,13 +24,13 @@ class AppPrincipal(ttk.Frame):
         self.devoluciones=Devoluciones(self.notebook)
         self.notebook.add(self.devoluciones, text="Devoluciones pendientes", padding=10)
 
-        self.notebook.pack(padx=10, pady=10, side=LEFT, fill=BOTH)
+        self.notebook.pack(padx=10, pady=10, side=LEFT, fill=BOTH, expand=True)
         self.pack(fill=BOTH)
 
 win = Tk()
 app = AppPrincipal(win)
-v1=NuevoCarnet(app)
-v2=CarnetPendiente(app)
+v1=NuevoCarnet(master=app)
+v2=CarnetPendiente(master=app)
 try:
     while 1:
         app.update()
