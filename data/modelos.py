@@ -1,4 +1,5 @@
-from pymongo import MongoClient
+from pymongo import *
+import datetime
 
 
 class Conexion:
@@ -15,14 +16,14 @@ class Conexion:
         self.historial = self.db['Historial']
         self.devolucion = self.db['Devolucion']
 
-    def anadirMaterial(self, codigo, nombre, cantidad='NA'):
+    def anadirMaterial(self, codigo, nombre, cantidad=-1):
         post = {
             'codigo': codigo,
             'nombre': nombre,
             'cantidad': cantidad
         }
         print(post)
-        self.material.insert_one(post)
+        self.material.insert(post)
 
     def listarMateriales(self):
         return self.material.find()
@@ -49,7 +50,8 @@ class Conexion:
         return self.historial.find()
 
     def buscarHistorial(self, prestante, fecha):
-        return self.historial.find_one({'prestante': prestante , 'fecha': fecha})
+        print(fecha)
+        return self.historial.find_one({'prestante': prestante, 'fecha': fecha})
 
     def buscarMatxID(self, id):
         return self.material.find_one({'_id': id})
@@ -62,5 +64,17 @@ class Conexion:
 
     def buscarDevoluciones(self, prestante, fecha):
         return self.devolucion.find_one({'prestante': prestante, 'fecha': fecha})
+        
+    def anadirPedido(self, prestante, materiales):
+        print(materiales)
+        post={'prestante': prestante, 'materiales': materiales, 'fecha': datetime.datetime.now()}
+        self.historial.insert(post)
+        self.devolucion.insert(post)
+        print(post)
+		
+    def buscarMaterial(self, codigo, nombre):
+        return self.material.find_one({'codigo': codigo , 'nombre': nombre})
+
+
 
 
