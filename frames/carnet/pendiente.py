@@ -34,7 +34,8 @@ class CarnetPendiente(Toplevel):
         pass
 
     def devolvermaterial(self):
-        pass
+        
+        self.destroy()
 
     def cancelar(self):
-        pass
+        self.destroy()
