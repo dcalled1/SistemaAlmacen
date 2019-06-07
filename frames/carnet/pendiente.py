@@ -1,11 +1,12 @@
 from tkinter import *
 from tkinter import ttk
+from data.modelos import *
 
 class CarnetPendiente(Toplevel):
     def __init__(self, id=0, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        ##self.conexion=Conexion()
+        self.conexion=Conexion()
 
         self.id=id
 
@@ -16,7 +17,7 @@ class CarnetPendiente(Toplevel):
         #self.list.heading("disponibilidad", text="Disponibilidad")
 
 
-        #self.listar()
+        self.listar()
 
         self.list.pack(expand=True, fill=BOTH)
 
@@ -29,13 +30,16 @@ class CarnetPendiente(Toplevel):
         self.cancel.pack(side=RIGHT)
 
 
-
-    def itemSeleccionado(self):
-        pass
-
     def devolvermaterial(self):
-        
+        self.conexion.devolverMaterial(self.id)
         self.destroy()
 
     def cancelar(self):
         self.destroy()
+
+    def listar(self):
+        materiales=self.conexion.listarMatPrestante(self.id)
+        for material in materiales:
+            mat=self.conexion.buscarMatxID(material)
+            self.list.insert('', END, text=mat.get('codigo'),
+                             values=(mat.get('nombre')), tags=("t",))

@@ -1,6 +1,8 @@
 from tkinter import ttk
 from tkinter import *
 from data.modelos import *
+
+
 class Devoluciones(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -17,9 +19,13 @@ class Devoluciones(ttk.Frame):
         self.pack(expand=True, fill=BOTH)
 
     def itemSeleccionado(self, event):
-        print("item en seleccion1")
         idITEM=self.list.item(self.list.selection())
-        reg=self.conexion.buscarHistorial(idITEM.get('text'), idITEM.get('values')[0])
+        y = int(idITEM.get('values')[0].split('-')[0])
+        m = int(idITEM.get('values')[0].split('-')[1])
+        d = int(idITEM.get('values')[0].split('-')[2])
+        start = datetime.datetime(y, m, d, 0, 0, 0)
+        end = datetime.datetime(y, m, d, 23, 59, 59)
+        reg=self.conexion.buscarDevoluciones(idITEM.get('text'), {'$lt': end, '$gte': start})
 
         if reg:
             obtener = obtenerDev(reg.get("_id"))
@@ -35,24 +41,21 @@ class obtenerDev(Toplevel):
     def __init__(self, id, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.id = id
+        self.conexion=Conexion()
         self.title("Pendientes")
         self.config()
         self.geometry("400x400+300+100");
-        self.list=ttk.Treeview(self, columns=("Cantidad"), selectmode=BROWSE)
-        self.list.heading("#0", text="Nombre")
-        self.list.heading("Cantidad", text="Cantidad")
-        self.list.tag_bind("t", "<<TreeviewSelect>>",
-                               self.itemSeleccionado)
+        self.list=ttk.Treeview(self, columns=("nombre"))
+        self.list.heading("#0", text="Codigo")
+        self.list.heading("nombre", text="Nombre")
+        self.listarMat()
         self.list.pack(expand=True, fill=BOTH)
 
-
-    def itemSeleccionado(self):
-        pass
-
     def listarMat(self):
-        materiales = self.conexion.buscarHistxID(self.id)
+        registro = self.conexion.buscarDevxID(self.id)
+        materiales = registro.get('materiales')
         self.list.delete(*self.list.get_children())
         for i in materiales:
             mat=self.conexion.buscarMatxID(i)
-            self.list.insert('', END, text= mat.get('_id'),
-                             values=(i.get('cantidad')), tags=("t",))
+            self.list.insert('', END, text=mat.get('codigo'),
+                             values=(mat.get('nombre')), tags=("t",))

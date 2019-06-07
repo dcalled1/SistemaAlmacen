@@ -49,17 +49,13 @@ class obtenerHis(Toplevel):
         self.title("Historial")
         self.config()
         self.geometry("400x400+300+100")
-        self.list=ttk.Treeview(self, columns=("nombre"), selectmode=BROWSE)
+        self.list=ttk.Treeview(self, columns=("nombre"))
         self.list.heading("#0", text="Codigo")
         self.list.heading("nombre", text="Nombre")
 
         self.listarMat()
         self.list.pack(expand=True, fill=BOTH)
-        arr=self.list.item(self.list.selection())
-
-
-    def itemSeleccionado(self):
-        pass
+        ##arr=self.list.item(self.list.selection())
 
 
     def listarMat(self):

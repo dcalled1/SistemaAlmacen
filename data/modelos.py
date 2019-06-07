@@ -41,14 +41,6 @@ class Conexion:
         #Ese nombre se pondrá en el otro frame
         #obtener la fecha
 
-    def agregarDevolucionesPendientes(self, codigo, cantidad, nombre):
-        post = {
-            'codigo': codigo,
-            'cantidad': cantidad,
-            'nombre': nombre
-        }
-        self.material.find_one(post)
-
     def listarHistorial(self):
         return self.historial.find()
 
@@ -61,6 +53,9 @@ class Conexion:
 
     def buscarHistxID(self, id):
         return self.historial.find_one({'_id': id})
+
+    def buscarDevxID(self, id):
+        return self.devolucion.find_one({'_id': id})
 
     def listarDevoluciones(self):
         return self.devolucion.find()
@@ -77,6 +72,23 @@ class Conexion:
 		
     def buscarMaterial(self, codigo, nombre):
         return self.material.find_one({'codigo': codigo , 'nombre': nombre})
+
+    def checarDevolucion(self, id):
+        if self.devolucion.count_documents({'prestante': id}) == 0:
+            return False
+        else:
+            return True
+
+    def listarMatPrestante(self, prest):
+        docs = self.devolucion.find({'prestante': prest})
+        materiales=[]
+        for doc in docs:
+            materiales.extend(doc.get('materiales'))
+        return materiales
+
+    def devolverMaterial(self, prest):
+        ids=self.devolucion.remove({'prestante': prest})
+
 
 
 
