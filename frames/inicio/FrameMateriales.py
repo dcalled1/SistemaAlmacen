@@ -16,7 +16,7 @@ class AñadirNuevo(Toplevel):
 
         self.lista=list
 
-        self.conexion=Conexion()
+        self.conexion=Conexion() #Instancia de la clase Conexion
 
         self.codLabel=Label(self, text="Código: ")
         self.codLabel.grid(column=0, row=0, padx=10, pady=10)
@@ -42,10 +42,10 @@ class AñadirNuevo(Toplevel):
         self.cantidad = Entry(self, state="disabled")
         self.cantidad.grid(column=1, row=3, padx=10, pady=10)
 
-        self.anadirBot=Button(self, text="Agregar", command=self.setData)
+        self.anadirBot=Button(self, text="Agregar", command=self.setData) #Botón añadir
         self.anadirBot.grid(column=1, row=4, columnspan=2, sticky='w')
 
-        self.cancelBot = Button(self, text="Cancelar", command=self.cancel)
+        self.cancelBot = Button(self, text="Cancelar", command=self.cancel) #Botón cancelar
         self.cancelBot.grid(column=1, row=4, columnspan=2, sticky='e')
 
 
@@ -79,7 +79,7 @@ class Materiales(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.conexion=Conexion()
+        self.conexion=Conexion() #Instancia de la clase conexión 
 
         self.list=ttk.Treeview(self, columns=("nombre", "cantidad"), selectmode=BROWSE)
 
@@ -94,11 +94,11 @@ class Materiales(ttk.Frame):
 
         self.list.pack(expand=True, fill=BOTH)
 
-        self.agregar=Button(self, text="Agregar nuevo...",
+        self.agregar=Button(self, text="Agregar nuevo...", #Botón para agregar un nuevo material
                             command=self.nuevoMaterial)
         self.agregar.pack(side=RIGHT)
 
-        self.eliminar=Button(self, text="Eliminar", state="disabled",
+        self.eliminar=Button(self, text="Eliminar", state="disabled", #Botón para eliminar un material existente seleccionado
                              command=self.eliminarMaterial)
         self.eliminar.pack(side=RIGHT)
 
@@ -115,9 +115,9 @@ class Materiales(ttk.Frame):
 
 
     def nuevoMaterial(self):
-        añadir=AñadirNuevo(self.list, master=self)
+        añadir=AñadirNuevo(self.list, master=self) #Añadimos el nuevo material
 
-    def eliminarMaterial(self):
+    def eliminarMaterial(self): #Eliminamos el material existente de la base de datos
         item=self.list.item(self.list.selection())
         self.conexion.quitarMaterial(item.get('text'), item.get('values')[0])
         self.listar()
@@ -125,13 +125,13 @@ class Materiales(ttk.Frame):
     def editarMaterial(self):
         pass
 
-    def listar(self):
-        docs=self.conexion.listarMateriales()
+    def listar(self): #Mostrar los materiales disponibles
+        docs=self.conexion.listarMateriales() #Conectar con la base de datos, retorna un dict
         self.list.delete(*self.list.get_children())
         for doc in docs:
             if doc.get('cantidad')==-1:
-                self.list.insert('', END, text=doc.get('codigo'),
-                             values=(doc.get('nombre')), tags=('t'))
+                self.list.insert('', END, text=doc.get('codigo'), #Insertar a list, que es el treeview de la interfaz gráfica Materiales
+                             values=(doc.get('nombre')), tags=('t')) 
             else:
                 self.list.insert('', END, text=doc.get('codigo'),
                              values=(doc.get('nombre'), str(doc.get('cantidad'))), tags=('t'))
