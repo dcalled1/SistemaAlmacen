@@ -44,7 +44,7 @@ class obtenerHis(Toplevel): #Segundo treeView de historial
     def __init__(self, id, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.id=id
-        self.conexion= Conexion() 
+        self.conexion= Conexion()  #Conectando a la base de datos
         self.title("Historial")
         self.config()
         self.geometry("400x400+300+100")
@@ -61,7 +61,7 @@ class obtenerHis(Toplevel): #Segundo treeView de historial
         self.list.delete(*self.list.get_children())
         for i in materiales: #Para recorrer cuando se presten varios objetos a la vez
             mat=self.conexion.buscarMatxID(i)
-            self.list.insert('', END, text= mat.get('codigo'),
+            self.list.insert('', END, text= mat.get('codigo'), #Insertarlos a list, que es el Treeview de la interfaz gráfica obtenerHis
                              values=(mat.get('nombre')), tags=("t",))
 
 
