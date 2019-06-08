@@ -29,16 +29,16 @@ class AppPrincipal(ttk.Frame):
         self.notebook.pack(padx=10, pady=10, side=LEFT, fill=BOTH)
         self.pack(fill=BOTH)
 
-win = Tk()
-app = AppPrincipal(win)
-reader=SimpleMFRC522()
+win = Tk() # Ventana principal
+app = AppPrincipal(win) 
+reader=SimpleMFRC522() #Lector de carnet
 
 def abrirCarnet(pend):
-    con=Conexion()
+    con=Conexion() #instancia conexion
     if con.checarDevolucion(pend):
-        c=CarnetPendiente(master=app,id=pend)
+        c=CarnetPendiente(master=app,id=pend) #Carnet existente y con materiales por devolver
     else:
-        c=NuevoCarnet(master=app, id=pend)
+        c=NuevoCarnet(master=app, id=pend) # Carnet Nuevo
 
 try:
     while 1:
