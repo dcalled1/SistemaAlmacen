@@ -62,7 +62,7 @@ class Conexion:
         return self.devolucion.find() #Busca en devoluciones
 
     def buscarDevoluciones(self, prestante, fecha):
-        return self.devolucion.find_one({'prestante': prestante, 'fecha': fecha}) #Retorna el diccionario específico en devoluciones con el id y la fecha
+        return self.devolucion.find_one({'prestante': int(prestante), 'fecha': fecha}) #Retorna el diccionario específico en devoluciones con el id y la fecha
         
     def anadirPedido(self, prestante, materiales):
         print(materiales)
