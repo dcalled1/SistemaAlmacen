@@ -9,7 +9,7 @@ class Historial(ttk.Frame):
         self.conexion= Conexion() #Instancia de la clase conexión, que conecta con la base de datos en mongo.
         super().__init__(*args, **kwargs)
 
-        self.list=ttk.Treeview(self, columns=("fecha"), selectmode=BROWSE) , # creando el TreeView para la ventana Historial
+        self.list=ttk.Treeview(self, columns=("fecha"), selectmode=BROWSE)  # creando el TreeView para la ventana Historial
         self.list.heading("#0", text="Prestante")
         self.list.heading("fecha", text="Fecha")
         self.list.tag_bind("t", "<<TreeviewSelect>>",

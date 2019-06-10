@@ -111,7 +111,6 @@ class Materiales(ttk.Frame):
 
     def itemSeleccionado(self, event):
         self.eliminar.config(state="normal")
-        self.editar.config(state="normal")
 
 
     def nuevoMaterial(self):
